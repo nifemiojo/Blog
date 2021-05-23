@@ -1,0 +1,41 @@
+<!-- 
+    Template tags control the rendering of the template and look like {'% tag %'}
+    
+    Template variables get replaced with values when the template is rendered
+        and look like {{ 'variable' }}
+    
+    Template filters allow you to modify variables for display and look like
+        {{ 'variable|filter' }}
+
+    https://docs.djangoproject.com/en/3.0/ref/templates/builtins/
+
+    Templates that inherit from this template can fill in
+        the {'% block %'} with content
+-->
+
+
+<!-- 
+    Tells Django to load the static template tags that are provided
+        by the django.contrib.staticfiles application
+
+    Allows us to use the {'% static %'} to include static files like .css
+-->
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <link href="{% static "css/blog.css" %}" rel="stylesheet">
+    </head>
+
+    <body>
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <div id="sidebar">
+            <h2>My blog</h2>
+            <p>This is my blog.</p>
+        </div>
+    </body>
+</html>
