@@ -8,6 +8,7 @@ pycodestyle = "*"
 
 [packages]
 django = "==3.0.*"
+django-taggit = "==1.2.0"
 
 [requires]
 python_version = "3.7"

@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
+from taggit.managers import TaggableManager
 
 """
 The custom manager will allow you to retrieve posts using Post.published
@@ -45,6 +46,11 @@ class Post(models.Model):
                               default='draft')
     objects = models.Manager()  # The default manager.
     published = PublishedManager()  # Our custom manager.
+    """
+    The tags manager will allow you to add, retrieve, and remove tags from Post
+        objects.
+    """
+    tags = TaggableManager()
 
     class Meta:
         ordering = ('-publish',)
@@ -55,11 +61,11 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         """
-        returns the canonical URL for the object
+        Returns the canonical URL for the object
 
         Use this method in templates to link to specific posts
 
-        reverse allows you to build URLs by their name and pass
+        Reverse allows you to build URLs by their name and pass
             optional parameters
         """
         return reverse(
@@ -71,3 +77,27 @@ class Post(models.Model):
                 self.slug
             ]
         )
+
+
+class Comment(models.Model):
+    """
+    related_name allows you to use Post.comments.all()
+        default is comment_set
+    """
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name='comments'
+    )
+    name = models.CharField(max_length=80)
+    email = models.EmailField()
+    body = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ('created',)
+
+    def __str__(self):
+        return f'Comment by {self.name} on {self.post}'

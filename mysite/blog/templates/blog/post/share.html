@@ -1,0 +1,33 @@
+{% extends "blog/base.html" %}
+
+{% block title %}Share a post{% endblock %}
+
+{% block content %}
+{% if sent %}
+    <h1>E-mail successfully sent</h1>
+    <p>
+      "{{ post.title }}" was successfully sent to {{ form.cleaned_data.to }}.
+    </p>
+  {% else %}
+    <!-- 
+    You tell Django to render its fields in
+        HTML paragraph <p> elements with the as_p method.
+    Can also use as_ul or as_table
+    -->
+    <h1>Share "{{ post.title }}" by e-mail</h1>
+    <form method="post">
+    <!-- 
+    Can also iterate through each field in form:
+        {% for field in form %}
+        <div>
+        {{ field.errors }}
+        {{ field.label_tag }} {{ field }}
+        </div>
+        {% endfor %} 
+    -->
+      {{ form.as_p }}
+      {% csrf_token %}
+      <input type="submit" value="Send e-mail">
+    </form>
+  {% endif %}
+{% endblock %}
